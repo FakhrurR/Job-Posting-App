@@ -37,38 +37,39 @@ module.exports = {
       })
   },
 
-  updateCategories : (req,res) => {
-      const id = req.params.id
-      const {name} = req.body
-      const data = { name } 
 
-    categoryModels.updateCategories(data)
-    .then(result => {
-        res.json({
-          status : 200,
-          message : 'Success update data id Category : ' + id,
-          data,
-          error : false
-        })
+  updateCategory : (req,res) => {
+    const id = req.params.id
+    const {name} = req.body
+    const data = { name } 
+
+   categoryModels.updateCategory(data,id)
+   .then(result => {
+      res.json({
+        status : 200,
+        message : 'Success update data with id Category : ' + id,
+        data,
+        error : false
+      })
+  })
+  .catch(err => {
+      console.log(err)
+  })    
+ },
+
+  deleteCategory : (req, res) => {
+  const id = req.params.id
+
+  categoryModels.deleteCategory(id).then(result => {
+      res.json({
+        status : 200,
+        message : 'Success delete data Category',
+        error : false
+      })
     })
     .catch(err => {
-        console.log(err)
-    })    
-  },
-
-  deleteCategories: (req, res) => {
-    const id = req.params.id
-
-    categoryModels.deleteCategories(id).then(result => {
-        res.json({
-          status : 200,
-          message : 'Success delete data Category',
-          error : false
-        })
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      console.log(err)
+    })
   }
   
 }

@@ -6,8 +6,8 @@ const categoryController = require('../controllers/categories')
 Route
     .get('/' , categoryController.getCategory)
     .post('/', categoryController.addCategory)
-    .patch('/:id', categoryController.updateCategories)
-    .delete('/:id', categoryController.deleteCategories)
+    .patch('/:id', categoryController.updateCategory)
+    .delete('/:id', categoryController.deleteCategory)
   
 
 module.exports = Route
