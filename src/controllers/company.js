@@ -15,7 +15,11 @@ module.exports = {
           })
         })
         .catch(err =>{
-            console.log(err)
+          res.json({
+            status : 404,
+            message : err,
+            error : true
+          })
         }) 
     },
 
@@ -23,7 +27,7 @@ module.exports = {
     const id = uuidv4()
     const { name,logo,location,description } = req.body
     const data = {
-      name,logo,location,description
+      id,name,logo,location,description
     }
 
     companyModels.addCompany(data,id).then(result => {
@@ -35,14 +39,18 @@ module.exports = {
         })
       })
       .catch(err => {
-        console.log(err)
+        res.json({
+          status : 404,
+          message : err,
+          error : true
+        })
       })
   },
 
   updateCompany : (req,res) => {
       const id = req.params.id
       const {name,logo,location,description} = req.body
-      const data = { name,logo,location,description } 
+      const data = {id,name,logo,location,description } 
 
     companyModels.updateCompany(data , id)
     .then(result => {
@@ -54,7 +62,11 @@ module.exports = {
         })
     })
     .catch(err => {
-        console.log(err)
+      res.json({
+        status : 404,
+        message : err,
+        error : true
+      })
     })    
   },
 
@@ -70,7 +82,11 @@ module.exports = {
           })
       })
       .catch(err => {
-        console.log(err)
+        res.json({
+          status : 404,
+          message : err,
+          error : true
+        })
       })
   }
 

@@ -16,7 +16,7 @@ module.exports = {
     return new Promise((resolve,reject) => {
       conn.query('SELECT * FROM company', data, (err,result) => {
         if(err){
-          reject(result)
+          reject(new Error(err))
         }else {
           resolve(result)
         }

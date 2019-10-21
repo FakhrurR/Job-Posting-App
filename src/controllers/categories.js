@@ -11,7 +11,11 @@ module.exports = {
             })
         })
         .catch(err =>{
-            console.log(err)
+          res.json({
+            status : 404,
+            message : err,
+            error : true
+          })
         }) 
     },
 
@@ -53,7 +57,11 @@ module.exports = {
       })
   })
   .catch(err => {
-      console.log(err)
+    res.json({
+      status : 404,
+      message : err,
+      error : true
+    })
   })    
  },
 
@@ -68,7 +76,11 @@ module.exports = {
       })
     })
     .catch(err => {
-      console.log(err)
+      res.json({
+        status : 404,
+        message : err,
+        error : true
+      })
     })
   }
   

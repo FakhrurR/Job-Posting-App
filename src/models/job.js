@@ -14,9 +14,9 @@ module.exports = {
   },
   getJob: (data) => {
     return new Promise((resolve,reject) => {
-      conn.query('SELECT j.id, j.decription, c.name AS category, j.created_at, j.updated_at FROM job j JOIN category c WHERE j.id_category = c.id', data, (err,result) => {
+      conn.query('SELECT j.id,j.name,j.description, c.name AS category,j.salary,p.name AS company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id ', data, (err,result) => {
         if(err){
-          reject(result)
+          reject(new Error(err))
         }else {
           resolve(result)
         }
@@ -44,5 +44,27 @@ module.exports = {
         }
       })
     })
+  },
+
+  searchJob:(name,company) =>{
+    return new Promise((resolve, reject) => {
+      // console.log(name)
+      const search = [];
+			(typeof name !== 'undefined' ? search.push(`j.name like '%${name}%'`) : '');
+			(typeof company !== 'undefined' ? search.push(`p.name like '%${company}%'`) : '');
+      console.log(company)
+      const yield = search.join(' OR ');
+    
+      const sql = `SELECT j.id,j.name,j.description, c.name AS category,j.salary,p.name AS company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id WHERE ${yield}`
+      
+      conn.query(sql,[name,company],(err,result) => {
+        if(!err){
+          resolve(result)
+        }else{
+          reject(new Error(err))
+        }
+      })  
+    })
   }
+
 }
