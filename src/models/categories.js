@@ -25,7 +25,7 @@ module.exports = {
   },
   updateCategory: (data,id) => {
     return new Promise((resolve, reject) => {
-      conn.query('UPDATE INTO category SET ? WHERE id=?', (data,id), (err, result) => {
+      conn.query('UPDATE INTO category SET ? WHERE id=?', [data,id], (err, result) => {
         if (!err) {
           resolve(result)
         } else {
@@ -36,7 +36,7 @@ module.exports = {
   },
   deleteCategory: (id) => {
     return new Promise((resolve, reject) => {
-      conn.query('DELETE FROM category WHERE id=?', id, (err, result) => {
+      conn.query('DELETE FROM category WHERE id = ?', [id], (err, result) => {
         if (!err) {
           resolve(result)
         } else {

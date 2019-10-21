@@ -3,53 +3,72 @@ const categoryModels = require('../models/categories')
 module.exports = {
     getCategory : (req,res) => {
         categoryModels.getCategory().then(result => {
-            res.json(result)
+            res.json({
+              status : 200,
+              message : 'Success get all data',
+              data : result,
+              error : false
+            })
         })
         .catch(err =>{
             console.log(err)
         }) 
     },
+
     addCategory: (req, res) => {
     const { name } = req.body
-    const data = {
-      name
-    }
+    const data = { name }
 
     categoryModels.addCategory(data).then(result => {
-        res.json(result)
+        res.json({
+          status : 200,
+          message : 'Success insert data Category',
+          data,
+          error : false
+        })
       })
       .catch(err => {
-        console.log(err)
+        res.Status(404).json({
+          status : 404,
+          message : err,
+          data,
+          error : true
+        })
       })
   },
 
   updateCategories : (req,res) => {
       const id = req.params.id
       const {name} = req.body
-      const data = {
-          name
-        } 
+      const data = { name } 
 
-    categoryModels.updateCategories(data , id)
+    categoryModels.updateCategories(data)
     .then(result => {
-        res.json(result)
+        res.json({
+          status : 200,
+          message : 'Success update data id Category : ' + id,
+          data,
+          error : false
+        })
     })
     .catch(err => {
         console.log(err)
     })    
   },
 
-  deleteCategories : (res,req) => { 
-      const id = req.params.id
+  deleteCategories: (req, res) => {
+    const id = req.params.id
 
-      categoryModels.deleteCategories(id)
-      .then(result => {
-          res.json(result)
+    categoryModels.deleteCategories(id).then(result => {
+        res.json({
+          status : 200,
+          message : 'Success delete data Category',
+          error : false
+        })
       })
       .catch(err => {
         console.log(err)
       })
   }
-
   
 }

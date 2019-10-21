@@ -14,7 +14,7 @@ module.exports = {
   },
   getJob: (data) => {
     return new Promise((resolve,reject) => {
-      conn.query('SELECT * FROM job', data, (err,result) => {
+      conn.query('SELECT j.id, j.decription, c.name AS category, j.created_at, j.updated_at FROM job j JOIN category c WHERE j.id_category = c.id', data, (err,result) => {
         if(err){
           reject(result)
         }else {

@@ -1,5 +1,7 @@
 const jobModels = require('../models/job')
 
+const uuid = require('uuid')
+
 module.exports = {
     getJob : (req,res) => {
         jobModels.getJob().then(result => {
@@ -9,13 +11,15 @@ module.exports = {
             console.log(err)
         }) 
     },
+
     addJob: (req, res) => {
-    const { name } = req.body
+    const id = uuid();
+    const {  name,description,id_category,location,id_company,date_added,date_updated } = req.body
     const data = {
-      name
+      name,description,id_category,location,id_company,date_added,date_updated
     }
 
-    jobModels.addJob(data).then(result => {
+    jobModels.addJob(data,id).then(result => {
         res.json(result)
       })
       .catch(err => {
@@ -25,9 +29,9 @@ module.exports = {
 
   updateJob : (req,res) => {
       const id = req.params.id
-      const {name} = req.body
+      const { name,description,id_category,location,id_company,date_added,date_updated } = req.body
       const data = {
-          name
+        name,description,id_category,location,id_company,date_added,date_updated
         } 
 
     jobModels.updateJob(data , id)

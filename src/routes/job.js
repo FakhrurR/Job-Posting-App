@@ -1,13 +1,13 @@
 const express = require('express')
 const Route = express.Router()
 
-const categoryController = require('../controllers/job')
+const jobController = require('../controllers/job')
 
 Route
-    .get('/' , categoryController.getJob)
-    .post('/', categoryController.addJob)
-    .patch('/', categoryController.updateJob)
-    .delete('/', categoryController.deleteJob)
+    .get('/' , jobController.getJob)
+    .post('/', jobController.addJob)
+    .patch('/:id', jobController.updateJob)
+    .delete('/:id', jobController.deleteJob)
   
 
 module.exports = Route
