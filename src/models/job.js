@@ -12,9 +12,31 @@ module.exports = {
       })
     })
   },
-  getJob: (data) => {
+  getJob: (name,company,limit,orderby,offset) => {
     return new Promise((resolve,reject) => {
-      conn.query('SELECT j.id,j.name,j.description, c.name AS category,j.salary,p.name AS company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id ', data, (err,result) => {
+
+      let sql = 'SELECT j.id,j.name,j.description, c.name AS category,j.salary,p.name AS company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id'
+
+      if(name){
+        sql  = sql + ` WHERE j.name LIKE '%${name}%' `;
+      }else if(company){
+        sql  = sql + ` WHERE p.name LIKE '%${company}%'`;
+      }
+
+		  if (orderby == 'name') {
+        sql  = sql + ` ORDER BY j.name DESC `;  
+		  } else if (orderby == 'category') {
+        sql  = sql + ` ORDER BY p.name DESC `;
+		  } else if (orderby == 'date_updated') {
+        sql  = sql + ` ORDER BY date_updated DESC `;
+      }
+      
+      if(limit){
+        sql  = sql + ` LIMIT ${limit}`;
+      }
+
+
+      conn.query(sql,(err,result) => {
         if(err){
           reject(new Error(err))
         }else {
@@ -45,26 +67,5 @@ module.exports = {
       })
     })
   },
-
-  searchJob:(name,company) =>{
-    return new Promise((resolve, reject) => {
-      // console.log(name)
-      const search = [];
-			(typeof name !== 'undefined' ? search.push(`j.name like '%${name}%'`) : '');
-			(typeof company !== 'undefined' ? search.push(`p.name like '%${company}%'`) : '');
-      console.log(company)
-      const yield = search.join(' OR ');
-    
-      const sql = `SELECT j.id,j.name,j.description, c.name AS category,j.salary,p.name AS company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id WHERE ${yield}`
-      
-      conn.query(sql,[name,company],(err,result) => {
-        if(!err){
-          resolve(result)
-        }else{
-          reject(new Error(err))
-        }
-      })  
-    })
-  }
 
 }

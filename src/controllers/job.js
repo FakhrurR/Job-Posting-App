@@ -4,35 +4,30 @@ const uuidv4 = require('uuid/v4');
 
 module.exports = {
     getJob : (req,res) => {
-      //  const { orderby, limit, page } = req.query;
+      
 
-      //  limit = limit || 5;
-		  //  page = page || 1;
-		  //  const offset = limit * (page - 1);
+        const {name,company,limit,orderby,offset} = req.query;
 
-		  // if (orderby == 'name') {
-			// orderby = 'j.name';
-		  // } else if (orderby == 'category') {
-			// orderby = 'c.name';
-		  // } else {
-			// orderby = 'j.updated_at';
-		  // }
-
-        jobModels.getJob().then(result => {
+        jobModels.getJob(name,company,limit,orderby,offset).then(result => {
+          
+          if(result.length < 1){
             res.json({
-              status: 200,
-              error: false,
-              message: 'Success',
-              data: result
+              status : 200,
+              message : 'Empty',
+              data : result,
+              error : false
+            })
+          }
+          else {
+            res.json({
+              status : 201,
+              message : 'Success',
+              data : result,
+              error : false
             });
+          }
         })
-        .catch(err =>{
-          res.json({
-            status : 404,
-            message : err,
-            error : true
-          })
-        }) 
+        .catch(err => console.log(err)); 
     },
 
     addJob: (req, res) => {
@@ -58,13 +53,7 @@ module.exports = {
         error : false
       })
     })
-      .catch(err => {
-        res.json({
-          status : 404,
-          message : err,
-          error : true
-        })
-      })
+    .catch(err => console.log(err));
   },
 
   updateJob : (req,res) => {
@@ -91,13 +80,7 @@ module.exports = {
         error : false
       })
     })
-    .catch(err => {
-      res.json({
-        status : 404,
-        message : err,
-        error : true
-      })
-    })    
+    .catch(err => console.log(err));   
   },
 
   deleteJob : (res,req) => { 
@@ -112,39 +95,6 @@ module.exports = {
           error : false
         })
       })
-      .catch(err => {
-        res.json({
-          status : 404,
-          message : err,
-          error : true
-        })
-      })
+      .catch(err => console.log(err));
   },
-
-  searchJob : (req,res) => { 
-    const { name,company } = req.query;
-    // console.log(company)
-    jobModels.searchJob(name,company)
-    .then(result => {
-      if(result.length < 1){
-      res.json({
-        status : 200,
-        message : 'Success',
-        data,
-        error : false
-      })
-    }
-    else {
-      res.json(result);
-    }
-  })
-    .catch(err => {
-      res.json({
-        status : 404,
-        message : 'Failed Search',
-        error : true
-      })
-    })
-}
-
 }
