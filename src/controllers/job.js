@@ -2,19 +2,32 @@ const jobModels = require('../models/job')
 
 const uuidv4 = require('uuid/v4');
 
+const redis = require('../helpers/redis');
+
+
 module.exports = {
     getJob : (req,res) => {
-      
 
-        const {name,company,limit,orderby,offset} = req.query;
+        let {name,company,limit,orderby,page} = req.query;
+
+        if(limit){limit = limit;}else{ limit = 5}
+		    if(page){page = page;}else{ page = 1}
+		    let offset = limit * (page - 1);
+
+        let redis_key = '';
+        if(name){ redis_key = redis_key + name }
+        if(company){ redis_key = redis_key + company }
 
         jobModels.getJob(name,company,limit,orderby,offset).then(result => {
-          
+        
+          let data = JSON.stringify(result);
+
+				  redis.caching(redis_key, data);
+
           if(result.length < 1){
             res.json({
-              status : 200,
+              status : 401,
               message : 'Empty',
-              data : result,
               error : false
             })
           }

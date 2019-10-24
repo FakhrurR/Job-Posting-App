@@ -33,6 +33,8 @@ module.exports = {
       
       if(limit){
         sql  = sql + ` LIMIT ${limit}`;
+      }if(offset){
+        sql  = sql + ` OFFSET ${offset}`;
       }
 
 
