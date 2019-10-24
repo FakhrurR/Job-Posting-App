@@ -14,15 +14,11 @@ module.exports = {
 		    if(page){page = page;}else{ page = 1}
 		    let offset = limit * (page - 1);
 
-        let redis_key = '';
-        if(name){ redis_key = redis_key + name }
-        if(company){ redis_key = redis_key + company }
-
         jobModels.getJob(name,company,limit,orderby,offset).then(result => {
         
           let data = JSON.stringify(result);
 
-				  redis.caching(redis_key, data);
+				  redis.caching(req.originalUrl, data);
 
           if(result.length < 1){
             res.json({
@@ -70,7 +66,8 @@ module.exports = {
   },
 
   updateJob : (req,res) => {
-      const id = req.params.id
+    redis.deleteCache(req.baseUrl).deleteCache(req.originalUrl);
+    const id = req.params.id
       const { name,description,id_category,salary,location,id_company } = req.body
       const data = {
        id,
@@ -96,7 +93,8 @@ module.exports = {
     .catch(err => console.log(err));   
   },
 
-  deleteJob : (res,req) => { 
+  deleteJob : (req,res) => { 
+      redis.deleteCache(req.baseUrl).deleteCache(req.originalUrl);
       const id = req.params.id
 
       jobModels.deleteJob(id)

@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const passport = require('passport')
 const configs = require('./src/configs/configs')
 
 const app = express()
@@ -10,6 +11,8 @@ app.listen(port, () => {
     console.log(`\n Server listening on port ${port}`)
 })
 
+app.use(passport.initialize())
+require ('./src/helpers/auth')(passport)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 

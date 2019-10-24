@@ -14,13 +14,9 @@ module.exports = {
             error : false
           })
         })
-        .catch(err =>{
-          res.json({
-            status : 404,
-            message : err,
-            error : true
-          })
-        }) 
+        .catch(err => {
+          console.log(err)
+        })  
     },
 
     addCompany: (req, res) => {
@@ -39,12 +35,8 @@ module.exports = {
         })
       })
       .catch(err => {
-        res.json({
-          status : 404,
-          message : err,
-          error : true
-        })
-      })
+        console.log(err)
+      })  
   },
 
   updateCompany : (req,res) => {
@@ -62,15 +54,11 @@ module.exports = {
         })
     })
     .catch(err => {
-      res.json({
-        status : 404,
-        message : err,
-        error : true
-      })
+      console.log(err)
     })    
   },
 
-  deleteCompany : (res,req) => { 
+  deleteCompany : (req,res) => { 
       const id = req.params.id
 
       companyModels.deleteCompany(id)
@@ -82,11 +70,7 @@ module.exports = {
           })
       })
       .catch(err => {
-        res.json({
-          status : 404,
-          message : err,
-          error : true
-        })
+        console.log(err)
       })
   }
 

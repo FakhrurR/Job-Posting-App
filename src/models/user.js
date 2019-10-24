@@ -3,7 +3,7 @@ const conn = require('../configs/db')
 module.exports = {
   signupUser: (data) => {
     return new Promise((resolve, reject) => {
-      conn.query('INSERT INTO user SET ?', data, (err, result) => {
+      conn.query('INSERT INTO user SET ?', [data], (err, result) => {
         if (!err) {
           resolve(result)
         } else {
@@ -14,6 +14,7 @@ module.exports = {
   },
 
   loginUser: (username,password) => {
+    
     return new Promise((resolve, reject) => {
       conn.query('SELECT * FROM user WHERE username = ? AND password = ?', [username,password], (err, result) => {
         

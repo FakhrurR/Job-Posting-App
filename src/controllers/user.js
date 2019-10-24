@@ -1,6 +1,8 @@
+require('dotenv/config')
 const userModels = require('../models/user')
 const uuidv4 = require('uuid/v4');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const saltRounds = 10;
 
@@ -20,13 +22,12 @@ module.exports = {
     },
 
     
-    signupUser: (req, res, next) => {
+    signupUser: (req, res) => {
     const id = uuidv4()
     const { username,email,password } = req.body
     const data = {
       id,username,email,password
     }
-
 
     bcrypt.hash(password, saltRounds, (err,hash) => {
     
@@ -47,57 +48,87 @@ module.exports = {
       })
       .catch(err => {
         console.log(err)
-        next();
+        // next();
       }); 
     }) 
   },
 
   loginUser: (req, res) => {
-    const { username,password } = req.body
-    const data = {
-      username,password
-    }   
+    let { username,password } = req.body
 
-    
-    console.log("password query : " + password)
-    console.log("password  data : " + data.password)
+    userModels.getUser().then(result => {
+
+      const user = result.filter(person => 
+        person.username == username);
+
+        bcrypt.compare(password, user[0].password).then(function(suitable) {
+        
+        if(suitable){
+          
+        userModels.loginUser(username,password).then(result => {   
+          const data = {
+               username : user[0].username,
+               password : user[0].password
+             }
+            
+             jwt.sign(data, 'secret', { expiresIn: '1h' }, (err, token) => {
+              if (err) console.log(err);
+              res.json({
+                status: 200,
+                message: 'Success to login',
+                data ,
+                error: false,
+                token: 'Bearer ' + token
+              });
+            });
+         })
+         .catch(err => {
+           console.log(err)
+         });
+        }
+        else{
+          res.json({
+            status : 401,
+            message : 'Username or Password is Wrong',
+            error : true
+        })
+        } 
+      }) 
      
-    userModels.loginUser(data).then(result => {
-       
-     let compare = bcrypt.compareSync(data.password, result.hash)
-    
-     if(compare){
-      res.json({
-        status : 200,
-        message : 'Success',
-        data,
-        error : false
-      })
-    }
-  })
-    .catch(err => {
-      console.log(err)
-      // next();
-    }); 
+    }) 
 },
 
   updateUser : (req,res) => {
       const id = req.params.id
-      const {username,email,password} = req.body
-      const data = {id,username,email,password } 
+      const { username,email,password } = req.body
+      const data = {
+      username,email,password
+    }
 
-    userModels.updateUser(data , id)
-    .then(result => {
-      res.json({
-        status : 200,
-        message : 'Success update data User',
-        data,
-        error : false
+      bcrypt.hash(password, saltRounds, (err,hash) => {
+    
+        data.password = hash;
+  
+        console.log(data.password)
+
+        userModels.updateUser(data).then(result => {
+          res.json({
+          status : 200,
+          message : 'Success update',
+          data : {
+            id,
+            username,
+            email,
+            password : hash
+          },
+          error : false
+          })
         })
-    })
-    .catch(err => {
-      console.log(err)
-    })    
+        .catch(err => {
+          console.log(err)
+          next();
+        }); 
+      })    
   },
 
   deleteUser : (req,res) => { 

@@ -10,12 +10,8 @@ module.exports = {
               error : false
             })
         })
-        .catch(err =>{
-          res.json({
-            status : 404,
-            message : err,
-            error : true
-          })
+        .catch(err => {
+          console.log(err)
         }) 
     },
 
@@ -32,12 +28,7 @@ module.exports = {
         })
       })
       .catch(err => {
-        res.Status(404).json({
-          status : 404,
-          message : err,
-          data,
-          error : true
-        })
+        console.log(err)
       })
   },
 
@@ -57,11 +48,7 @@ module.exports = {
       })
   })
   .catch(err => {
-    res.json({
-      status : 404,
-      message : err,
-      error : true
-    })
+    console.log(err)
   })    
  },
 
@@ -76,12 +63,7 @@ module.exports = {
       })
     })
     .catch(err => {
-      res.json({
-        status : 404,
-        message : err,
-        error : true
+        console.log(err)
       })
-    })
+    }
   }
-  
-}
