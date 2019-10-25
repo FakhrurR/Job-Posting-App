@@ -12,6 +12,7 @@ module.exports = {
       })
     })
   },
+  
   getJob: (name,company,limit,orderby,offset) => {
     return new Promise((resolve,reject) => {
 
@@ -21,6 +22,8 @@ module.exports = {
         sql  = sql + ` WHERE j.name LIKE '%${name}%' `;
       }else if(company){
         sql  = sql + ` WHERE p.name LIKE '%${company}%'`;
+      }else{
+        console.log("Not Found")
       }
 
 		  if (orderby == 'name') {
@@ -29,6 +32,8 @@ module.exports = {
         sql  = sql + ` ORDER BY p.name DESC `;
 		  } else if (orderby == 'date_updated') {
         sql  = sql + ` ORDER BY date_updated DESC `;
+      }else{
+        console.log("Not Found")
       }
       
       if(limit){
@@ -36,7 +41,6 @@ module.exports = {
       }if(offset){
         sql  = sql + ` OFFSET ${offset}`;
       }
-
 
       conn.query(sql,(err,result) => {
         if(err){
@@ -47,6 +51,7 @@ module.exports = {
       })
     })
   },
+  
   updateJob: (data,id) => {
     return new Promise((resolve, reject) => {
       conn.query('UPDATE job SET ? WHERE id=?', [data,id], (err, result) => {

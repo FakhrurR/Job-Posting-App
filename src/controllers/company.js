@@ -42,7 +42,11 @@ module.exports = {
   updateCompany : (req,res) => {
       const id = req.params.id
       const {name,logo,location,description} = req.body
-      const data = {id,name,logo,location,description } 
+      const data = {}
+      if(name) data.name = name
+      if(logo) data.logo = logo
+      if(location) data.location = location
+      if(description) data.description = description 
 
     companyModels.updateCompany(data , id)
     .then(result => {

@@ -1,12 +1,11 @@
 const express = require('express')
 const Route = express.Router()
-
 const redis = require('../helpers/redis');
-const isAuthorization = require('../helpers/auth')
+// const isAuthorization = passport.authenticate('jwt', { session: false });
 const jobController = require('../controllers/job')
 
 Route
-    .get('/' , redis.getCached , jobController.getJob)
+    .get('/' , jobController.getJob)
     .post('/', jobController.addJob)
     .patch('/:id',jobController.updateJob)
     .delete('/:id', jobController.deleteJob)

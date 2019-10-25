@@ -14,15 +14,17 @@ client.on('error', (err) => {
 module.exports = {
   getCached: (req, res, next) => {
 
-    client.get(req.originalUrl,(err,result) =>{
-      
+    client.get(req.originalUrl,(err,result) =>{ 
+      if (err) console.log(err);
+
       if(result != null){
         res.send({
           massage : "Success",
           result : JSON.parse(result)
         });
-      }else{
-        next();
+      }
+      else{
+        next()
       }
       
     })
@@ -33,5 +35,6 @@ module.exports = {
   delCache: (key) => {
     client.del(key)
   }
-},
+  
+}
 client

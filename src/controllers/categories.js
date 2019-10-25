@@ -36,8 +36,8 @@ module.exports = {
   updateCategory : (req,res) => {
     const id = req.params.id
     const {name} = req.body
-    const data = { name } 
-
+    const data = { } 
+    if(name) { data.name = name }
    categoryModels.updateCategory(data,id)
    .then(result => {
       res.json({

@@ -41,7 +41,6 @@ module.exports = {
           id,
           username,
           email,
-          password : hash
         },
         error : false
         })
@@ -101,9 +100,10 @@ module.exports = {
   updateUser : (req,res) => {
       const id = req.params.id
       const { username,email,password } = req.body
-      const data = {
-      username,email,password
-    }
+      const data = {}
+      if(username) data.username = username
+      if(email) data.email = email
+      if(password) data.password = password
 
       bcrypt.hash(password, saltRounds, (err,hash) => {
     
@@ -119,7 +119,6 @@ module.exports = {
             id,
             username,
             email,
-            password : hash
           },
           error : false
           })
