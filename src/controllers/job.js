@@ -44,6 +44,33 @@ module.exports = {
         .catch(err => console.log(err)); 
     },
 
+    getJobById : (req,res) => {
+
+      const id = req.params.id
+
+      jobModels.getJobById(id).then(result => {
+      
+        if(result.length < 1){
+          res.json({
+            status : 401,
+            message : 'Not Found',
+            error : true,
+            total_data : 0
+          })
+        }
+        else {
+          res.json({
+            status : 201,
+            message : 'Success',
+            data : result,
+            error : false,
+            total_data : result.length
+          });
+        }
+      })
+      .catch(err => console.log(err)); 
+  },
+
     addJob: (req, res) => {
     const id = uuidv4();
     const {  name,description,id_category,salary,location,id_company } = req.body

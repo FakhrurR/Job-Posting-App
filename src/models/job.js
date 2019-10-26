@@ -13,7 +13,7 @@ module.exports = {
     })
   },
   
-  getJob: (name,company,limit,orderby,offset) => {
+  getJob: (name,company,limit,orderby,offset,mode) => {
     return new Promise((resolve,reject) => {
 
       let sql = 'SELECT j.id,j.name,j.description, c.name AS category,j.salary,p.name AS company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id'
@@ -22,18 +22,14 @@ module.exports = {
         sql  = sql + ` WHERE j.name LIKE '%${name}%' `;
       }else if(company){
         sql  = sql + ` WHERE p.name LIKE '%${company}%'`;
-      }else{
-        console.log("Not Found")
       }
 
 		  if (orderby == 'name') {
-        sql  = sql + ` ORDER BY j.name DESC `;  
+        sql  = sql + ` ORDER BY j.name ASC`;  
 		  } else if (orderby == 'category') {
-        sql  = sql + ` ORDER BY p.name DESC `;
+        sql  = sql + ` ORDER BY p.name ASC`;
 		  } else if (orderby == 'date_updated') {
-        sql  = sql + ` ORDER BY date_updated DESC `;
-      }else{
-        console.log("Not Found")
+        sql  = sql + ` ORDER BY date_updated ASC`;
       }
       
       if(limit){
@@ -42,7 +38,25 @@ module.exports = {
         sql  = sql + ` OFFSET ${offset}`;
       }
 
+      // if(mode == 'asc' || mode == 'ASC'){ sql += `ASC`;}
+      // if(mode == 'desc' || mode == 'DESC'){ sql += `DESC`;}
+
       conn.query(sql,(err,result) => {
+        if(err){
+          reject(new Error(err))
+        }else {
+          resolve(result)
+        }
+      })
+    })
+  },
+
+  getJobById: (id) => {
+    return new Promise((resolve,reject) => {
+
+      let sql = `SELECT j.id,j.name,j.description, c.name AS category,j.salary,p.name AS company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id WHERE j.id=?`
+
+      conn.query(sql, [id], (err,result) => {
         if(err){
           reject(new Error(err))
         }else {

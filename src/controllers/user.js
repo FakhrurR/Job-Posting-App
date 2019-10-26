@@ -10,7 +10,7 @@ module.exports = {
   
     getUser : (req,res) => {
 
-      userModels.getUser().then(result => {
+      userModels.getAllUser().then(result => {
           res.json({
             status : 200,
             message : 'Success get all data user',
@@ -22,6 +22,21 @@ module.exports = {
         .catch(err => console.log(err)); 
     },
 
+    getUserById : (req,res) => {
+
+      const id = req.params.id
+
+      userModels.getUserById(id).then(result => {
+          res.json({
+            status : 200,
+            message : 'Success get with id user ',
+            data : result,
+            error : false,
+            total_data : result.length
+          })
+        })
+        .catch(err => console.log(err)); 
+    },
     
     signupUser: (req, res) => {
     const id = uuidv4()
@@ -58,10 +73,6 @@ module.exports = {
     let { username,password } = req.body
 
     userModels.getUser().then(result => {
-
-      console.log("password :"+ result[0].password)
-      console.log("username :"+ result[0].username)
-
       const user = result.filter(person => 
         person.username == username);
 
@@ -80,7 +91,9 @@ module.exports = {
               res.json({
                 status: 200,
                 message: 'Success to login',
-                data ,
+                data : {
+                  username
+                },
                 error: false,
                 token: 'Bearer ' + token
               });

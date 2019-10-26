@@ -20,6 +20,24 @@ module.exports = {
         })  
     },
 
+    getCompanyById : (req,res) => {
+      
+      const id = req.params.id
+
+      companyModels.getCompanyById(id).then(result => {
+          res.json({
+            status : 200,
+            message : 'Success get all data',
+            data : result,
+            error : false,
+            total_data : result.length
+          })
+        })
+        .catch(err => {
+          console.log(err)
+        })  
+    },
+
     addCompany: (req, res) => {
     const id = uuidv4()
     const { name,logo,location,description } = req.body

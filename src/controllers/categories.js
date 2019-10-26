@@ -16,6 +16,24 @@ module.exports = {
         }) 
     },
 
+    getCategoryById : (req,res) => {
+      
+      const id = req.params.id
+
+      categoryModels.getCategoryById(id).then(result => {
+          res.json({
+            status : 200,
+            message : 'Success get data',
+            data : result,
+            error : false,
+            total_data : result.length
+          })
+      })
+      .catch(err => {
+        console.log(err)
+      }) 
+  },
+
     addCategory: (req, res) => {
     const { name } = req.body
     const data = { name }

@@ -6,6 +6,7 @@ const jobController = require('../controllers/job')
 
 Route
     .get('/' , jobController.getJob)
+    .get('/:id' , jobController.getJobById)
     .post('/', jobController.addJob)
     .patch('/:id',jobController.updateJob)
     .delete('/:id', jobController.deleteJob)

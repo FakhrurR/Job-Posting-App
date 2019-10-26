@@ -23,6 +23,19 @@ module.exports = {
       })
     })
   },
+
+  getCompanyById: (id) => {
+    return new Promise((resolve,reject) => {
+      conn.query('SELECT * FROM company WHERE id=?', [id], (err,result) => {
+        if(err){
+          reject(new Error(err))
+        }else {
+          resolve(result)
+        }
+      })
+    })
+  },
+
   updateCompany: (data,id) => {
     return new Promise((resolve, reject) => {
       conn.query('UPDATE company SET ? WHERE id=?', [data,id], (err, result) => {

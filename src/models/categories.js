@@ -23,6 +23,18 @@ module.exports = {
       })
     })
   },
+
+  getCategoryById: (id) => {
+    return new Promise((resolve,reject) => {
+      conn.query('SELECT * FROM category WHERE id=?', [id], (err,result) => {
+        if(err){
+          reject(new Error(err))
+        }else {
+          resolve(result)
+        }
+      })
+    })
+  },
   
   updateCategory: (data,id) => {
     return new Promise((resolve, reject) => {

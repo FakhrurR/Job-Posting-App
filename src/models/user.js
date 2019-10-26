@@ -29,6 +29,30 @@ module.exports = {
 
   getUser: (data) => {
     return new Promise((resolve,reject) => {
+      conn.query('SELECT * FROM user', data, (err,result) => {
+        if(err){
+          reject(new Error(err))
+        }else {
+          resolve(result)
+        }
+      })
+    })
+  },
+
+  getUserById: (id) => {
+    return new Promise((resolve,reject) => {
+      conn.query('SELECT id,username,email FROM user WHERE id = ?', [id], (err,result) => {
+        if(err){
+          reject(new Error(err))
+        }else {
+          resolve(result)
+        }
+      })
+    })
+  },
+  
+  getAllUser: (data) => {
+    return new Promise((resolve,reject) => {
       conn.query('SELECT id,username,email FROM user', data, (err,result) => {
         if(err){
           reject(new Error(err))
@@ -38,6 +62,7 @@ module.exports = {
       })
     })
   },
+
   updateUser: (data,id) => {
     return new Promise((resolve, reject) => {
       conn.query('UPDATE user SET ? WHERE id=?', [data,id], (err, result) => {
