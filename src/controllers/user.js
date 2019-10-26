@@ -9,13 +9,14 @@ const saltRounds = 10;
 module.exports = {
   
     getUser : (req,res) => {
-      
+
       userModels.getUser().then(result => {
           res.json({
             status : 200,
             message : 'Success get all data user',
             data : result,
-            error : false
+            error : false,
+            total_data : result.length
           })
         })
         .catch(err => console.log(err)); 
@@ -42,7 +43,8 @@ module.exports = {
           username,
           email,
         },
-        error : false
+        error : false,
+        total_data : result.length
         })
       })
       .catch(err => {
@@ -57,6 +59,9 @@ module.exports = {
 
     userModels.getUser().then(result => {
 
+      console.log("password :"+ result[0].password)
+      console.log("username :"+ result[0].username)
+
       const user = result.filter(person => 
         person.username == username);
 
@@ -70,7 +75,7 @@ module.exports = {
                password : user[0].password
              }
             
-             jwt.sign(data, 'secret', { expiresIn: '1h' }, (err, token) => {
+             jwt.sign(data, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
               if (err) console.log(err);
               res.json({
                 status: 200,
@@ -120,7 +125,8 @@ module.exports = {
             username,
             email,
           },
-          error : false
+          error : false,
+          total_data : result.length
           })
         })
         .catch(err => {
@@ -138,7 +144,8 @@ module.exports = {
         res.json({
           status : 200,
           message : 'Success delete data User',
-          error : false
+          error : false,
+          total_data : result.length
           })
       })
       .catch(err => {

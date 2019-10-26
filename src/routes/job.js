@@ -1,6 +1,6 @@
 const express = require('express')
 const Route = express.Router()
-const redis = require('../helpers/redis');
+// const redis = require('../helpers/redis');
 // const isAuthorization = passport.authenticate('jwt', { session: false });
 const jobController = require('../controllers/job')
 

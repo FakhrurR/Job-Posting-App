@@ -25,7 +25,8 @@ module.exports = {
             res.json({
               status : 401,
               message : 'Not Found',
-              error : false
+              error : true,
+              total_data : 0
             })
           }
           else {
@@ -34,7 +35,9 @@ module.exports = {
               page : page,
               message : 'Success',
               data : result,
-              error : false
+              limit : limit,
+              error : false,
+              total_data : result.length
             });
           }
         })
@@ -66,7 +69,8 @@ module.exports = {
         status : 200,
         message : 'Success insert job',
         data,
-        error : false
+        error : false,
+        total_data : result.length
       })
     })
     .catch(err => console.log(err));
@@ -92,13 +96,14 @@ module.exports = {
     jobModels.updateJob(data , id)
     .then(result => {
 
-      redis.delCache(req.originalUrl)
+      // redis.delCache(req.originalUrl)
       
       res.json({
         status : 200,
         message : 'Success update job',
         data,
-        error : false
+        error : false,
+        total_data : result.length
       })
     })
     .catch(err => console.log(err));   
@@ -117,7 +122,8 @@ module.exports = {
           status : 200,
           message : 'Success delete job',
           data,
-          error : false
+          error : false,
+          total_data : result.length
         })
       })
       .catch(err => console.log(err));

@@ -7,7 +7,8 @@ module.exports = {
               status : 200,
               message : 'Success get all data',
               data : result,
-              error : false
+              error : false,
+              total_data : result.length
             })
         })
         .catch(err => {
@@ -24,7 +25,8 @@ module.exports = {
           status : 200,
           message : 'Success insert data Category',
           data,
-          error : false
+          error : false,
+          total_data : result.length
         })
       })
       .catch(err => {
@@ -44,7 +46,8 @@ module.exports = {
         status : 200,
         message : 'Success update data with id Category : ' + id,
         data,
-        error : false
+        error : false,
+        total_data : result.length
       })
   })
   .catch(err => {
@@ -59,7 +62,8 @@ module.exports = {
       res.json({
         status : 200,
         message : 'Success delete data Category',
-        error : false
+        error : false,
+        total_data : result.length
       })
     })
     .catch(err => {

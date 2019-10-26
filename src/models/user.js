@@ -29,7 +29,7 @@ module.exports = {
 
   getUser: (data) => {
     return new Promise((resolve,reject) => {
-      conn.query('SELECT * FROM user', data, (err,result) => {
+      conn.query('SELECT id,username,email FROM user', data, (err,result) => {
         if(err){
           reject(new Error(err))
         }else {
