@@ -50,9 +50,10 @@ module.exports = {
       data.password = hash;
 
       userModels.signupUser(data).then(result => {
+
         res.json({
         status : 200,
-        message : 'Success',
+        message : 'Success register user',
         data : {
           id,
           username,
@@ -64,26 +65,28 @@ module.exports = {
       })
       .catch(err => {
         console.log(err)
-        // next();
       }); 
     }) 
-  },
+},
 
   loginUser: (req, res) => {
-    let { username,password } = req.body
 
-    userModels.getUser().then(result => {
-      const user = result.filter(person => 
-        person.username == username);
+    const { email,password } = req.body
 
-        bcrypt.compare(password, user[0].password).then(function(suitable) {
-        
-        if(suitable){
-          
-        userModels.loginUser(username,password).then(result => {   
+    userModels.verifyEmail(email).then(result => {
+
+      console.log(result[0].email)  
+
+      if(result.length > 0){
+      
+      const verifyUser = result[0].email;
+      const match = bcrypt.compareSync(password, result[0].password);
+
+        if(match){
+        userModels.loginUser(email,password).then(result => {   
           const data = {
-               username : user[0].username,
-               password : user[0].password
+               username : verifyUser,
+               password : match
              }
             
              jwt.sign(data, process.env.JWT_KEY, { expiresIn: '1h' }, (err, token) => {
@@ -92,7 +95,7 @@ module.exports = {
                 status: 200,
                 message: 'Success to login',
                 data : {
-                  username
+                  email
                 },
                 error: false,
                 token: 'Bearer ' + token
@@ -101,18 +104,16 @@ module.exports = {
          })
          .catch(err => {
            console.log(err)
-         });
-        }
-        else{
+         }); 
+        }else{
           res.json({
-            status : 401,
-            message : 'Username or Password is Wrong',
-            error : true
-        })
-        } 
-      }) 
-     
-    }) 
+            status: 401,
+            message: 'Password is incorrect',
+            error: true,
+          })
+        }
+      }else{ res.json({message : 'email not register or incorrect'}) }
+    })
 },
 
   updateUser : (req,res) => {

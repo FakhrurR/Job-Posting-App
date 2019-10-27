@@ -40,10 +40,15 @@ module.exports = {
 
     addCompany: (req, res) => {
     const id = uuidv4()
-    const { name,logo,location,description } = req.body
+    const { name,location,description } = req.body
+    const logo = req.file.filename;
     const data = {
       id,name,logo,location,description
     }
+
+    console.log(name)
+    console.log(data.name)
+    console.log(location)
 
     companyModels.addCompany(data,id).then(result => {
       res.json({
@@ -61,7 +66,8 @@ module.exports = {
 
   updateCompany : (req,res) => {
       const id = req.params.id
-      const {name,logo,location,description} = req.body
+      const {name,location,description} = req.body
+      const logo = req.file.filename;
       const data = {}
       if(name) data.name = name
       if(logo) data.logo = logo

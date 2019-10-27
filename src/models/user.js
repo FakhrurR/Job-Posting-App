@@ -13,10 +13,10 @@ module.exports = {
     })
   },
 
-  loginUser: (username,password) => {
+  loginUser: (email,password) => {
     
     return new Promise((resolve, reject) => {
-      conn.query('SELECT * FROM user WHERE username = ? AND password = ?', [username,password], (err, result) => {
+      conn.query('SELECT * FROM user WHERE email = ? AND password = ?', [email,password], (err, result) => {
         
         if (!err) {
           resolve(result)
@@ -30,6 +30,18 @@ module.exports = {
   getUser: (data) => {
     return new Promise((resolve,reject) => {
       conn.query('SELECT * FROM user', data, (err,result) => {
+        if(err){
+          reject(new Error(err))
+        }else {
+          resolve(result)
+        }
+      })
+    })
+  },
+
+  verifyEmail: (email) => {
+    return new Promise((resolve,reject) => {
+      conn.query('SELECT * FROM user WHERE email = ?', [email], (err,result) => {
         if(err){
           reject(new Error(err))
         }else {
