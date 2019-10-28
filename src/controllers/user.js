@@ -60,7 +60,6 @@ module.exports = {
           email,
         },
         error : false,
-        total_data : result.length
         })
       })
       .catch(err => {
@@ -76,8 +75,6 @@ module.exports = {
     userModels.verifyEmail(email).then(result => {
 
       console.log(result[0].email)  
-
-      if(result.length > 0){
       
       const verifyUser = result[0].email;
       const match = bcrypt.compareSync(password, result[0].password);
@@ -106,13 +103,18 @@ module.exports = {
            console.log(err)
          }); 
         }else{
-          res.json({
-            status: 401,
-            message: 'Password is incorrect',
+          res.status(404).json({
+            status: 404,
+            message: 'Email or Password is incorrect',
             error: true,
           })
         }
-      }else{ res.json({message : 'email not register or incorrect'}) }
+    }).catch(err => {
+      res.status(404).json({
+        status: 404,
+        message: 'Email or Password is incorrect',
+        error: true,
+      })
     })
 },
 

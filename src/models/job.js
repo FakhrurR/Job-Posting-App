@@ -66,6 +66,21 @@ module.exports = {
     })
   },
   
+  getTotalData: () => {
+    return new Promise((resolve,reject) => {
+
+      let sql = `SELECT COUNT(*) AS data FROM job`
+
+      conn.query(sql, (err,result) => {
+        if(err){
+          reject(new Error(err))
+        }else {
+          resolve(result)
+        }
+      })
+    })
+  },
+
   updateJob: (data,id) => {
     return new Promise((resolve, reject) => {
       conn.query('UPDATE job SET ? WHERE id=?', [data,id], (err, result) => {

@@ -12,7 +12,15 @@ module.exports = {
 
         if(limit){limit = limit;}else{ limit = 2}
 		    if(page){page = page;}else{ page = 1}
-		    let offset = limit * (page - 1);
+        let offset = limit * (page - 1);
+        
+        jobModels.getTotalData().then(result => {
+
+        const total_job = result[0].data
+        let total_page = Math.ceil(result[0].data/limit) 
+        if(total_page < 1){
+          total_page = 1
+        } 
 
         jobModels.getJob(name,company,limit,orderby,offset).then(result => {
         
@@ -32,16 +40,18 @@ module.exports = {
           else {
             res.json({
               status : 201,
-              page : page,
+              current_page : page,
               message : 'Success',
               data : result,
               limit : limit,
               error : false,
-              total_data : result.length
+              total_data : total_job,
+              total_page,
             });
           }
         })
         .catch(err => console.log(err)); 
+      })
     },
 
     getJobById : (req,res) => {
