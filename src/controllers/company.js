@@ -41,7 +41,9 @@ module.exports = {
     addCompany: (req, res) => {
     const id = uuidv4()
     const { name,location,description } = req.body
-    const logo = req.file.filename;
+    const logo_file = req.file.filename;
+    const host = req.hostname
+    let logo = `http://${host}:${process.env.PORT}/public/images/${logo_file}` 
     const data = {
       id,name,logo,location,description
     }
@@ -50,21 +52,34 @@ module.exports = {
       res.json({
         status : 200,
         message : 'Success insert data Company',
-        data,
+        data : {
+          id,
+          name,
+          logo,
+          location,
+          description
+        },
         error : false,
         total_data : result.length
         })
       })
       .catch(err => {
-        console.log(err)
+        res.status(401).json({
+          status : 401,
+          message : 'Failed to Save Data',
+          error : true,
+          })
       })  
   },
 
   updateCompany : (req,res) => {
       const id = req.params.id
-      const {name,logo,location,description} = req.body
-      // const logo = req.file.filename;
-      const data = {}
+      const {name,location,description} = req.body
+      const logo_file = req.file.filename;
+      const host = req.hostname
+      let logo = `http://${host}:${process.env.PORT}/public/images/${logo_file}` 
+      
+      let data = {}
       if(name) data.name = name
       if(logo) data.logo = logo
       if(location) data.location = location

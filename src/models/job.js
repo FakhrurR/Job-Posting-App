@@ -16,7 +16,7 @@ module.exports = {
   getJob: (name,company,limit,orderby,offset,mode) => {
     return new Promise((resolve,reject) => {
 
-      let sql = 'SELECT j.id,j.name,j.description, c.name AS category,j.salary,p.name AS company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id'
+      let sql = 'SELECT j.id,j.name,j.description,c.id AS id_category,c.name AS category,j.salary,p.id AS id_company,p.name AS company,p.logo,p.location,p.description AS desc_company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id'
 
       if(name){
         sql  = sql + ` WHERE j.name LIKE '%${name}%' `;
@@ -28,8 +28,8 @@ module.exports = {
         sql  = sql + ` ORDER BY j.name ASC`;  
 		  } else if (orderby == 'category') {
         sql  = sql + ` ORDER BY p.name ASC`;
-		  } else if (orderby == 'date_updated') {
-        sql  = sql + ` ORDER BY date_updated ASC`;
+		  } else {
+        sql  = sql + ` ORDER BY date_updated DESC`;
       }
       
       if(limit){
@@ -54,7 +54,7 @@ module.exports = {
   getJobById: (id) => {
     return new Promise((resolve,reject) => {
 
-      let sql = `SELECT j.id,j.name,j.description, c.name AS category,j.salary,p.name AS company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id WHERE j.id=?`
+      let sql = 'SELECT j.id,j.name,j.description,c.id AS id_category,c.name AS category,j.salary,p.name AS company,p.logo,p.location,p.description AS desc_company,j.date_added, j.date_updated FROM job j INNER JOIN category c ON j.id_category = c.id INNER JOIN company p ON j.id_company = p.id'
 
       conn.query(sql, [id], (err,result) => {
         if(err){

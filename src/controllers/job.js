@@ -8,26 +8,39 @@ const uuidv4 = require('uuid/v4');
 module.exports = {
     getJob : (req,res) => {
 
+        const host = req.hostname
+
         let {name,company,limit,orderby,page} = req.query;
 
-        if(limit){limit = limit;}else{ limit = 2}
-		    if(page){page = page;}else{ page = 1}
+        if(limit){limit = limit;}else{ limit = 5}
+		    if(page){page = 1}
         let offset = limit * (page - 1);
-        
+
+
+
         jobModels.getTotalData().then(result => {
 
         const total_job = result[0].data
         let total_page = Math.ceil(result[0].data/limit) 
-        if(total_page < 1){
-          total_page = 1
+        console.log(page)  
+        
+        let current_page = parseInt(page)
+
+        let next = 1;
+        if(current_page < total_page){
+          next = current_page + 1
+        }else if(current_page > total_page){
+          next;
+        }
+
+        let prev = 1;
+        if(current_page > 1){
+          prev = current_page - 1
+        }else if(prev < 1) {
+          prev = 1
         } 
 
         jobModels.getJob(name,company,limit,orderby,offset).then(result => {
-        
-          // let data = JSON.stringify(result);
-          // redis.getCached(req.originalUrl, data);
-          
-          // console.log("SAVE REDIS\n")
 
           if(result.length < 1){
             res.json({
@@ -40,8 +53,10 @@ module.exports = {
           else {
             res.json({
               status : 201,
-              current_page : page,
-              message : 'Success',
+              current_page : parseInt(page),
+              next,
+              prev,
+              message : 'Success get all data',
               data : result,
               limit : limit,
               error : false,
@@ -153,8 +168,6 @@ module.exports = {
       jobModels.deleteJob(id)
       .then(result => {
 
-        // redis.delCache(req.originalUrl)
-
         res.json({
           status : 200,
           message : 'Success delete job',
@@ -163,6 +176,12 @@ module.exports = {
           total_data : result.length
         })
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        res.json({
+          status : 404,
+          message : 'Failed delete job',
+          error : true,
+        })
+      });
   },
 }

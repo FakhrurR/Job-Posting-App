@@ -45,6 +45,16 @@ module.exports = {
       id,username,email,password
     }
 
+    userModels.getAllUser(data).then(result => {
+
+    // console.log(result.email)  
+    // console.log(email)
+    // console.log(result.l)
+
+    for(let i=0;i < result.length ; i++){
+
+    if(email != result[i].email){
+    
     bcrypt.hash(password, saltRounds, (err,hash) => {
     
       data.password = hash;
@@ -65,7 +75,16 @@ module.exports = {
       .catch(err => {
         console.log(err)
       }); 
-    }) 
+    })
+  }else{
+    res.json({
+      status : 404,
+      message : 'Email is Already Exist',
+      error : true,
+      })
+  }
+}
+  }) 
 },
 
   loginUser: (req, res) => {
