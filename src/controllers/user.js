@@ -170,7 +170,7 @@ module.exports = {
         userModels.updateUser(data,id).then(result => {
           res.json({
           status : 200,
-          message : 'Success update',
+          message : 'Success Update User',
           data,
           error : false,
           total_data : result.length
