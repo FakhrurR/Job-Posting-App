@@ -13,10 +13,8 @@ module.exports = {
         let {name,company,limit,orderby,page} = req.query;
 
         if(limit){limit = limit;}else{ limit = 5}
-		    if(page){page = 1}
+		    if(page){page = page} else {page = 1}
         let offset = limit * (page - 1);
-
-
 
         jobModels.getTotalData().then(result => {
 
@@ -44,8 +42,9 @@ module.exports = {
 
           if(result.length < 1){
             res.json({
-              status : 401,
-              message : 'Not Found',
+              status : 404,
+              prev,
+              message : 'Page Not Found',
               error : true,
               total_data : 0
             })
@@ -53,7 +52,7 @@ module.exports = {
           else {
             res.json({
               status : 201,
-              current_page : parseInt(page),
+              current_page : page,
               next,
               prev,
               message : 'Success get all data',

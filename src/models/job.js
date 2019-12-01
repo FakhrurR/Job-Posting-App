@@ -38,6 +38,9 @@ module.exports = {
         sql  = sql + ` OFFSET ${offset}`;
       }
 
+      //offset buat mulainya dari mana misal ofset 5 mulai dari 6 dan seterusnya 
+      //sesuai limitnya kalo limit itu batasannya
+
       // if(mode == 'asc' || mode == 'ASC'){ sql += `ASC`;}
       // if(mode == 'desc' || mode == 'DESC'){ sql += `DESC`;}
 

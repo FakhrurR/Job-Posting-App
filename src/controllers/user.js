@@ -41,17 +41,16 @@ module.exports = {
     signupUser: (req, res) => {
     const id = uuidv4()
     const { username,email,password } = req.body
+    const photo_file = req.file.filename;
+    const host = req.hostname
+    let photo = `http://${host}:${process.env.PORT}/public/images/${photo_file}` 
     const data = {
-      id,username,email,password
+      id,username,email,password,photo
     }
 
     userModels.getAllUser(data).then(result => {
 
-    // console.log(result.email)  
-    // console.log(email)
-    // console.log(result.l)
-
-    for(let i=0;i < result.length ; i++){
+    for(let i=0;i < result.length ; i++){  
 
     if(email != result[i].email){
     
@@ -68,6 +67,7 @@ module.exports = {
           id,
           username,
           email,
+          photo
         },
         error : false,
         })
@@ -140,9 +140,13 @@ module.exports = {
   updateUser : (req,res) => {
       const id = req.params.id
       const { username,email,password } = req.body
+      const photo_file = req.file.filename;
+      const host = req.hostname
+      let photo = `http://${host}:${process.env.PORT}/public/images/${photo_file}` 
       const data = {}
       if(username) data.username = username
       if(email) data.email = email
+      if(photo) data.photo = photo
       if(password) data.password = password
 
       bcrypt.hash(password, saltRounds, (err,hash) => {
@@ -159,6 +163,7 @@ module.exports = {
             id,
             username,
             email,
+            photo,
           },
           error : false,
           total_data : result.length

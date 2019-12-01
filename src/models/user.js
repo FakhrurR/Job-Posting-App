@@ -53,7 +53,7 @@ module.exports = {
 
   getUserById: (id) => {
     return new Promise((resolve,reject) => {
-      conn.query('SELECT id,username,email FROM user WHERE id = ?', [id], (err,result) => {
+      conn.query('SELECT id,username,email,user_level FROM user WHERE id = ?', [id], (err,result) => {
         if(err){
           reject(new Error(err))
         }else {
@@ -65,7 +65,7 @@ module.exports = {
   
   getAllUser: (data) => {
     return new Promise((resolve,reject) => {
-      conn.query('SELECT id,username,email FROM user', data, (err,result) => {
+      conn.query('SELECT id,username,email,user_level FROM user', data, (err,result) => {
         if(err){
           reject(new Error(err))
         }else {
