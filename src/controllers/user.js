@@ -40,12 +40,12 @@ module.exports = {
     
     signupUser: (req, res) => {
     const id = uuidv4()
-    const { username,email,password } = req.body
+    const { username,email,password,name,user_level } = req.body
     const photo_file = req.file.filename;
     const host = req.hostname
-    let photo = `http://${host}:${process.env.PORT}/public/images/${photo_file}` 
+    let photo = `${photo_file}` 
     const data = {
-      id,username,email,password,photo
+      id,username,email,password,photo,name,user_level
     }
 
     userModels.getAllUser(data).then(result => {
@@ -66,8 +66,10 @@ module.exports = {
         data : {
           id,
           username,
+          name,
           email,
-          photo
+          photo,
+          user_level
         },
         error : false,
         })
@@ -137,17 +139,27 @@ module.exports = {
     })
 },
 
+  
+
   updateUser : (req,res) => {
       const id = req.params.id
-      const { username,email,password } = req.body
-      const photo_file = req.file.filename;
-      const host = req.hostname
-      let photo = `http://${host}:${process.env.PORT}/public/images/${photo_file}` 
+      const { username,email,password,name,user_level } = req.body
+      
+      userModels.getUserByIdWithPassword(id).then(result => {
+        console.log(result[0])
+        
+        let photo = '';
+        if(req.file){
+        const photo_file = req.file.filename; 
+        photo = `${photo_file}`
+        }
       const data = {}
       if(username) data.username = username
+      if(name) data.name = name
       if(email) data.email = email
       if(photo) data.photo = photo
       if(password) data.password = password
+      if(user_level) data.user_level = user_level
 
       bcrypt.hash(password, saltRounds, (err,hash) => {
     
@@ -155,16 +167,11 @@ module.exports = {
   
         console.log(data.password)
 
-        userModels.updateUser(data).then(result => {
+        userModels.updateUser(data,id).then(result => {
           res.json({
           status : 200,
           message : 'Success update',
-          data : {
-            id,
-            username,
-            email,
-            photo,
-          },
+          data,
           error : false,
           total_data : result.length
           })
@@ -173,7 +180,8 @@ module.exports = {
           console.log(err)
           next();
         }); 
-      })    
+      })
+    });    
   },
 
   deleteUser : (req,res) => { 

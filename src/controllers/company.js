@@ -43,7 +43,7 @@ module.exports = {
     const { name,location,description } = req.body
     const logo_file = req.file.filename;
     const host = req.hostname
-    let logo = `http://${host}:${process.env.PORT}/public/images/${logo_file}` 
+    let logo = `${logo_file}` 
     const data = {
       id,name,logo,location,description
     }
@@ -75,10 +75,11 @@ module.exports = {
   updateCompany : (req,res) => {
       const id = req.params.id
       const {name,location,description} = req.body
+      let logo ='';
+      if(req.file){
       const logo_file = req.file.filename;
-      const host = req.hostname
-      let logo = `http://${host}:${process.env.PORT}/public/images/${logo_file}` 
-      
+      logo = `${logo_file}` 
+      }
       let data = {}
       if(name) data.name = name
       if(logo) data.logo = logo
