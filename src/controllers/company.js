@@ -41,9 +41,13 @@ module.exports = {
     addCompany: (req, res) => {
     const id = uuidv4()
     const { name,location,description } = req.body
+    let logo ='';
+    if(req.file){
+    const host = req.hostname;
+    const port = process.env.port;  
     const logo_file = req.file.filename;
-    const host = req.hostname
-    let logo = `${logo_file}` 
+    logo = `http://${host}:${port}/public/images/${logo_file}` 
+    } 
     const data = {
       id,name,logo,location,description
     }
@@ -77,8 +81,10 @@ module.exports = {
       const {name,location,description} = req.body
       let logo ='';
       if(req.file){
+      const host = req.hostname;
+      const port = process.env.port;  
       const logo_file = req.file.filename;
-      logo = `${logo_file}` 
+      logo = `http://${host}:${port}/public/images/${logo_file}` 
       }
       let data = {}
       if(name) data.name = name

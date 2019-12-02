@@ -41,9 +41,13 @@ module.exports = {
     signupUser: (req, res) => {
     const id = uuidv4()
     const { username,email,password,name,user_level } = req.body
-    const photo_file = req.file.filename;
-    const host = req.hostname
-    let photo = `${photo_file}` 
+    let photo = '';
+        if(req.file){ 
+        const host = req.hostname;
+        const port = process.env.port;  
+        const photo_file = req.file.filename;
+        photo = `http://${host}:${port}/public/images/${photo_file}` 
+        }
     const data = {
       id,username,email,password,photo,name,user_level
     }
@@ -146,12 +150,12 @@ module.exports = {
       const { username,email,password,name,user_level } = req.body
       
       userModels.getUserByIdWithPassword(id).then(result => {
-        console.log(result[0])
-        
         let photo = '';
-        if(req.file){
-        const photo_file = req.file.filename; 
-        photo = `${photo_file}`
+        if(req.file){ 
+        const host = req.hostname;
+        const port = process.env.port;  
+        const photo_file = req.file.filename;
+        photo = `http://${host}:${port}/public/images/${photo_file}` 
         }
       const data = {}
       if(username) data.username = username
