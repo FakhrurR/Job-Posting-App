@@ -18,8 +18,6 @@
   - [Clone](#Clone)
   - [Create Environment Variable](#Create-Environment-Variable)
   - [Start Development Server](#Start-Development-Server)
-    <!-- - [Run server development](#Run-server-development) -->
-  - [Build For Production](#Build-For-Production)
 - [API Docs](#API-Docs)
   - [Jobs](#Jobs)
   - [Categories](#Category)
@@ -97,12 +95,6 @@ API_JWT_SECRET=''
 ```bash
 $ npm start
 ```
----
-### Build For Production
-```bash
-$ npm build or yarn build
-```
----
 
 ## API Docs
 
