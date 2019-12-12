@@ -7,6 +7,30 @@
 </p>
 
 ---
+
+## Table Of Contents
+
+- [Introduction](#Introduction)
+- [Prerequiste](#Prerequiste)
+- [Feature](#Feature)
+- [Stacks](#Stacks)
+- [Installation](#Installation)
+  - [Clone](#Clone)
+  - [Create Environment Variable](#Create Environment Variable)
+  - [Start Development Server](#Start Development Server)
+    <!-- - [Run server development](#Run-server-development) -->
+  - [Build For Production](#Build-For-Production)
+- [API Docs](#API Docs)
+  - [Jobs](#Jobs)
+  - [Categories](#Category)
+  - [Company](#Company)
+  - [User](#User)
+  - [Auth](#Auth)
+- [License and Support](#License-and-Support)
+
+---
+
+---
 ## Introduction
 
 Restful Api Job Posting app is an application program interface (API) that uses HTTP requests to GET, PUT, POST and DELETE data to people that want a job or company that want hire an employee.
@@ -72,6 +96,11 @@ API_JWT_SECRET=''
 ### Start Development Server
 ```bash
 $ npm start
+```
+---
+### Build For Production
+```bash
+$ npm build or yarn build
 ```
 ---
 
